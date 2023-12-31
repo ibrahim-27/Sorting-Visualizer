@@ -1,6 +1,6 @@
 import React from "react";
 import Canvas from "./components/Canvas";
-import img from "../src/assets/img.jpg";
+import img from "../src/assets/sui.jpg";
 
 function App() {
   return (

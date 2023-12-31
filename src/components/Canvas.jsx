@@ -5,9 +5,11 @@ const Canvas = ({ imageUrl }) => {
   const [sortedArray, setSortedArray] = useState([]);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("bubble");
   const [isSorting, setIsSorting] = useState(false);
+
   const canvasRef = useRef(null);
-  const width = 400;
-  const height = 250;
+
+  const width = 500;
+  const height = 300;
   const delay = 1;
 
   {
@@ -41,7 +43,7 @@ const Canvas = ({ imageUrl }) => {
       imgData[i] = rgb.r;
       imgData[i + 1] = rgb.g;
       imgData[i + 2] = rgb.b;
-      imgData[i + 3] = 255; // Alpha value (255 means fully opaque)
+      imgData[i + 3] = 255;
     }
 
     return newImageData;
@@ -63,7 +65,6 @@ const Canvas = ({ imageUrl }) => {
 
     for (let i = 0; i < n - 1; i++) {
       for (let j = 0; j < n - i - 1; j++) {
-
         if (array[j].order > array[j + 1].order) {
           const temp = array[j];
           array[j] = array[j + 1];
@@ -71,7 +72,7 @@ const Canvas = ({ imageUrl }) => {
         }
       }
 
-      if(i%50 === 0){
+      if (i % 50 === 0) {
         await new Promise((resolve) => setTimeout(resolve, delay));
         setSortedArray([...array]);
       }
@@ -100,7 +101,7 @@ const Canvas = ({ imageUrl }) => {
       array[min_idx] = array[i];
       array[i] = temp;
 
-      if(i%50 === 0){
+      if (i % 50 === 0) {
         await new Promise((resolve) => setTimeout(resolve, delay));
         setSortedArray([...array]);
       }
@@ -127,7 +128,7 @@ const Canvas = ({ imageUrl }) => {
       }
       array[j + 1] = key;
 
-      if(i%50 === 0){
+      if (i % 30 === 0) {
         await new Promise((resolve) => setTimeout(resolve, delay));
         setSortedArray([...array]);
       }
@@ -135,6 +136,145 @@ const Canvas = ({ imageUrl }) => {
 
     setSortedArray([...array]);
 
+    return array;
+  };
+
+  const CombSort = async (array) => {
+    const swap = (arr, i, j) => {
+      const temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+    };
+
+    let gap = array.length;
+    let swapped = true;
+
+    while (gap !== 1 || swapped) {
+      gap = Math.max(1, Math.floor(gap / 1.3));
+      swapped = false;
+
+      for (let i = 0; i + gap < array.length; i++) {
+        if (array[i].order > array[i + gap].order) {
+          swap(array, i, i + gap);
+          swapped = true;
+
+          if (i % 1000 === 0) {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+            setSortedArray([...array]);
+          }
+        }
+      }
+    }
+
+    setSortedArray([...array]);
+
+    return array;
+  };
+
+  const MergeSort = async (array) => {
+    const merge = async (arr, left, mid, right) => {
+      const n1 = mid - left + 1;
+      const n2 = right - mid;
+  
+      const leftArray = new Array(n1);
+      const rightArray = new Array(n2);
+  
+      for (let i = 0; i < n1; i++) {
+        leftArray[i] = arr[left + i];
+      }
+  
+      for (let j = 0; j < n2; j++) {
+        rightArray[j] = arr[mid + 1 + j];
+      }
+  
+      let i = 0;
+      let j = 0;
+      let k = left;
+  
+      while (i < n1 && j < n2) {
+        if (leftArray[i].order <= rightArray[j].order) {
+          arr[k] = leftArray[i];
+          i++;
+        } else {
+          arr[k] = rightArray[j];
+          j++;
+        }
+        k++;
+
+        if(k % 1500 === 0){
+          await new Promise((resolve) => setTimeout(resolve, delay));
+          setSortedArray([...arr]);
+        }
+      }
+  
+      while (i < n1) {
+        arr[k] = leftArray[i];
+        i++;
+        k++;
+      }
+  
+      while (j < n2) {
+        arr[k] = rightArray[j];
+        j++;
+        k++;
+      }
+    };
+  
+    const mergeSortHelper = async (arr, left, right) => {
+      if (left < right) {
+        const mid = Math.floor((left + right) / 2);
+  
+        await mergeSortHelper(arr, left, mid);
+        await mergeSortHelper(arr, mid + 1, right);
+  
+        await merge(arr, left, mid, right);
+      }
+    };
+  
+    await mergeSortHelper(array, 0, array.length - 1);
+    setSortedArray([...array]);
+  
+    return array;
+  };
+
+  const QuickSort = async (array) => {
+    const partition = async (arr, low, high) => {
+      const pivot = arr[high].order;
+      let i = low - 1;
+  
+      for (let j = low; j < high; j++) {
+        if (arr[j].order < pivot) {
+          i++;
+          const temp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = temp;
+        }
+      }
+  
+      const temp = arr[i + 1];
+      arr[i + 1] = arr[high];
+      arr[high] = temp;
+  
+      return i + 1;
+    };
+  
+    const quickSortHelper = async (arr, low, high) => {
+      if (low < high) {
+        const pivotIndex = await partition(arr, low, high);
+  
+        if (low % 50 === 0) {
+          await new Promise((resolve) => setTimeout(resolve, delay));
+          setSortedArray([...arr]);
+        }
+  
+        await quickSortHelper(arr, low, pivotIndex - 1);
+        await quickSortHelper(arr, pivotIndex + 1, high);
+      }
+    };
+  
+    await quickSortHelper(array, 0, array.length - 1);
+    setSortedArray([...array]);
+  
     return array;
   };
 
@@ -164,7 +304,6 @@ const Canvas = ({ imageUrl }) => {
     /* Use Effect for Shuffled Array */
   }
   useEffect(() => {
-    // console.log(ShuffledArray.length > 0)
     if (ShuffledArray.length > 0) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
@@ -177,24 +316,28 @@ const Canvas = ({ imageUrl }) => {
       );
 
       ctx.putImageData(newImageData, 0, 0);
-      // console.log("here")
     }
-    // console.log(ShuffledArray)
   }, [ShuffledArray]);
 
   useEffect(() => {
     setShuffledArray(sortedArray);
   }, [sortedArray]);
-
+  
   const OnSortClick = async () => {
     setIsSorting(true);
-    console.log(true);
+
     if (selectedAlgorithm === "bubble") {
       await BubbleSort(ShuffledArray);
     } else if (selectedAlgorithm === "selection") {
       await SelectionSort(ShuffledArray);
     } else if (selectedAlgorithm === "insertion") {
       await InsertionSort(ShuffledArray);
+    } else if (selectedAlgorithm === "comb") {
+      await CombSort(ShuffledArray);
+    } else if (selectedAlgorithm === "merge") {
+      await MergeSort(ShuffledArray);
+    } else if (selectedAlgorithm === "quick") {
+      await QuickSort(ShuffledArray);
     }
 
     setIsSorting(false);
@@ -214,39 +357,42 @@ const Canvas = ({ imageUrl }) => {
             borderRadius: "8px",
           }}
         />
-          <div className="flex flex-col gap-2 items-center justify-center md:flex-row">
-            <div className="flex gap-2 ">
-              <button
-                onClick={() => {
-                  OnSortClick();
-                }}
-                className="bg-[#EAF2EF] hover:bg-[#0D090A] text-[#521945] font-bold py-2 px-6 rounded disabled:opacity-50 disabled:bg0gray-400 disabled:cursor-not-allowed"
-                disabled={isSorting}
-              >
-                Sort
-              </button>
-              <button
-                onClick={() => {
-                  Shuffle(sortedArray);
-                }}
-                className="bg-[#EAF2EF] hover:bg-[#0D090A] text-[#521945] font-bold py-2 px-6 rounded disabled:opacity-50 disabled:bg0gray-400 disabled:cursor-not-allowed"
-                disabled={isSorting}
-              >
-                Shuffle
-              </button>
-            </div>
-            <select
-              className="text-[#521945] px-2 py-1 rounded"
-              value={selectedAlgorithm}
-              onChange={(e) => {
-                setSelectedAlgorithm(e.target.value);
+        <div className="flex flex-col gap-2 items-center justify-center md:flex-row">
+          <div className="flex gap-2 ">
+            <button
+              onClick={() => {
+                OnSortClick();
               }}
+              className="bg-[#EAF2EF] hover:bg-[#0D090A] text-[#521945] font-bold py-2 px-6 rounded disabled:opacity-50 disabled:bg0gray-400 disabled:cursor-not-allowed"
+              disabled={isSorting}
             >
-              <option value="bubble">Bubble Sort</option>
-              <option value="selection">Selection Sort</option>
-              <option value="insertion">Insertion Sort</option>
-            </select>
+              Sort
+            </button>
+            <button
+              onClick={() => {
+                Shuffle(sortedArray);
+              }}
+              className="bg-[#EAF2EF] hover:bg-[#0D090A] text-[#521945] font-bold py-2 px-6 rounded disabled:opacity-50 disabled:bg0gray-400 disabled:cursor-not-allowed"
+              disabled={isSorting}
+            >
+              Shuffle
+            </button>
           </div>
+          <select
+            className="text-[#521945] px-2 py-1 rounded"
+            value={selectedAlgorithm}
+            onChange={(e) => {
+              setSelectedAlgorithm(e.target.value);
+            }}
+          >
+            <option value="bubble">Bubble Sort</option>
+            <option value="selection">Selection Sort</option>
+            <option value="insertion">Insertion Sort</option>
+            <option value="comb">Comb Sort</option>
+            <option value="merge">Merge Sort</option>
+            <option value="quick">Quick Sort</option>
+          </select>
+        </div>
       </div>
     </div>
   );

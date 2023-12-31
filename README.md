@@ -30,7 +30,7 @@ This web application allows users to visually explore the workings of classic so
 
 3. **Start the Development Server:**
     ```bash
-    npm start
+    npm run dev
     ```
 
 ## Usage
