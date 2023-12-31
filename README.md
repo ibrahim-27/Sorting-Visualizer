@@ -1,7 +1,5 @@
 # Sorting Algorithms Visualizer
 
-![Project Image](./path/to/your/image.png)
-
 ## Overview
 
 This web application allows users to visually explore the workings of classic sorting algorithms—Bubble Sort, Selection Sort, and Insertion Sort. By uploading an image, users can witness the real-time rearrangement of pixels, providing insights into the efficiency and mechanics of each algorithm.
@@ -22,7 +20,7 @@ This web application allows users to visually explore the workings of classic so
 
 1. **Clone the Repository:**
     ```bash
-    git clone https://github.com/your-username/sorting-algorithms-visualizer.git
+    git clone https://github.com/ibrahim-27/Sorting-Visualizer.git
     ```
 
 2. **Install Dependencies:**
