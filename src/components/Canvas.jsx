@@ -8,8 +8,8 @@ const Canvas = ({ imageUrl }) => {
 
   const canvasRef = useRef(null);
 
-  const width = 500;
-  const height = 300;
+  const width = window.innerWidth < 600 ? 320 : 500;
+  const height = window.innerWidth < 600 ? 200 : 300;;
   const delay = 1;
 
   {
