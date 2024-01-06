@@ -4,10 +4,14 @@
 
 This web application allows users to visually explore the workings of classic sorting algorithms—Bubble Sort, Selection Sort, and Insertion Sort. By uploading an image, users can witness the real-time rearrangement of pixels, providing insights into the efficiency and mechanics of each algorithm.
 
+## Live Preview
+
+Live Preview at: https://ibrahim-27.github.io/Sorting-Visualizer/
+
 ## Features
 
 - **Dynamic Visualization:** Watch sorting algorithms in action on an uploaded image.
-- **Algorithm Selection:** Choose between Bubble Sort, Selection Sort, and Insertion Sort.
+- **Algorithm Selection:** Choose between Bubble, Selection, Merge, Quick, Comb and Insertion Sort.
 - **Shuffle and Reset:** Randomize pixel order or reset to the initial state after sorting.
 
 ## Technologies Used
