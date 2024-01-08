@@ -5,6 +5,7 @@ const Canvas = ({ imageUrl }) => {
   const [sortedArray, setSortedArray] = useState([]);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("bubble");
   const [isSorting, setIsSorting] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
 
   const canvasRef = useRef(null);
 
@@ -325,6 +326,7 @@ const Canvas = ({ imageUrl }) => {
   
   const OnSortClick = async () => {
     setIsSorting(true);
+    setFirstLoad(false);
 
     if (selectedAlgorithm === "bubble") {
       await BubbleSort(ShuffledArray);
@@ -373,7 +375,7 @@ const Canvas = ({ imageUrl }) => {
                 Shuffle(sortedArray);
               }}
               className="bg-[#EAF2EF] hover:bg-[#0D090A] text-[#521945] font-bold py-2 px-6 rounded disabled:opacity-50 disabled:bg0gray-400 disabled:cursor-not-allowed"
-              disabled={isSorting}
+              disabled={isSorting || firstLoad}
             >
               Shuffle
             </button>
