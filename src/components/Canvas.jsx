@@ -73,7 +73,7 @@ const Canvas = ({ imageUrl }) => {
         }
       }
 
-      if (i % 50 === 0) {
+      if (i % 150 === 0) {
         await new Promise((resolve) => setTimeout(resolve, delay));
         setSortedArray([...array]);
       }
@@ -102,7 +102,7 @@ const Canvas = ({ imageUrl }) => {
       array[min_idx] = array[i];
       array[i] = temp;
 
-      if (i % 50 === 0) {
+      if (i % 150 === 0) {
         await new Promise((resolve) => setTimeout(resolve, delay));
         setSortedArray([...array]);
       }
@@ -129,7 +129,7 @@ const Canvas = ({ imageUrl }) => {
       }
       array[j + 1] = key;
 
-      if (i % 30 === 0) {
+      if (i % 150 === 0) {
         await new Promise((resolve) => setTimeout(resolve, delay));
         setSortedArray([...array]);
       }
@@ -159,7 +159,7 @@ const Canvas = ({ imageUrl }) => {
           swap(array, i, i + gap);
           swapped = true;
 
-          if (i % 1000 === 0) {
+          if (i % 500 === 0) {
             await new Promise((resolve) => setTimeout(resolve, delay));
             setSortedArray([...array]);
           }
@@ -202,7 +202,7 @@ const Canvas = ({ imageUrl }) => {
         }
         k++;
 
-        if(k % 1500 === 0){
+        if(k % 1000 === 0){
           await new Promise((resolve) => setTimeout(resolve, delay));
           setSortedArray([...arr]);
         }
@@ -285,6 +285,7 @@ const Canvas = ({ imageUrl }) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
+    setFirstLoad(true);
 
     const img = new Image();
     img.src = imageUrl;
@@ -347,17 +348,13 @@ const Canvas = ({ imageUrl }) => {
 
   return (
     <div className="h-3/4 w-full mx-auto border border-black md:w-4/5 lg:w-2/3 flex items-center justify-center bg-[#521945] text-white">
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center relative">
         <h1 className="text-4xl text-center mb-16">
           Sorting Algorithms Visualizer
         </h1>
         <canvas
           ref={canvasRef}
-          className="border border-black shadow-lg mb-4"
-          style={{
-            maxWidth: "100%",
-            borderRadius: "8px",
-          }}
+          className="border border-black shadow-lg mb-4 max-w-full rounded-md"
         />
         <div className="flex flex-col gap-2 items-center justify-center md:flex-row">
           <div className="flex gap-2 ">
